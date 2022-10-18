@@ -1,0 +1,16 @@
+name: Greetings
+
+on: [pull_request_target, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: "Greetings! This is a one man project for the time being, issues might take a while to get fixed!"
+        pr-message: "Hello there! Thank you for submiting your first PR. As this is a one man project, PRs might take a while to be reviewed and aproved"
