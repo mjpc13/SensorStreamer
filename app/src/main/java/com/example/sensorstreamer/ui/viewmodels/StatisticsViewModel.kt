@@ -12,5 +12,9 @@ class StatisticsViewModel @ViewModelInject constructor(
     val mainRepository: MainRepository
 ): ViewModel() {
 
+    val meanTime = mainRepository.getTotalMeanTimeInMillis()
+    val meanDistance = mainRepository.getTotalMeanDistance()
+    val meanAvgSpeed = mainRepository.getMeanAvgSpeed()
 
+    val runsSortedByDate = mainRepository.getsAllRunsSortedByDate()
 }

@@ -1,7 +1,5 @@
 package com.example.sensorstreamer.services
 
-import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -10,7 +8,6 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.location.LocationRequest
 import android.os.Build
 import android.os.Looper
 import androidx.annotation.RequiresApi
@@ -20,7 +17,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.sensorstreamer.R
 import com.example.sensorstreamer.other.Constants.ACTION_PAUSE_SERVICE
-import com.example.sensorstreamer.other.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.example.sensorstreamer.other.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.sensorstreamer.other.Constants.ACTION_STOP_SERVICE
 import com.example.sensorstreamer.other.Constants.FASTEST_LOCATION_INTERVAL
@@ -30,7 +26,6 @@ import com.example.sensorstreamer.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.sensorstreamer.other.Constants.NOTIFICATION_ID
 import com.example.sensorstreamer.other.Constants.TIMER_UPDATE_INTERVAL
 import com.example.sensorstreamer.other.TrackingUtility
-import com.example.sensorstreamer.ui.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY

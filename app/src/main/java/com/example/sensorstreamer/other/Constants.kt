@@ -15,6 +15,12 @@ object Constants {
 
     const val TIMER_UPDATE_INTERVAL=50L
 
+    const val SHARED_PREFERENCES_NAME= "sharedPref"
+    const val KEY_WEBSOCKET= "KEY_WEBSOCKET"
+    const val KEY_TOPIC= "KEY_TOPIC"
+
+
+
     const val LOCATION_UPDATE_RATE = 5000L //In milliseconds at the moment
     const val FASTEST_LOCATION_INTERVAL = 2000L
 

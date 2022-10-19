@@ -17,10 +17,8 @@ import com.example.sensorstreamer.other.Constants.POLYLINE_COLOR
 import com.example.sensorstreamer.other.Constants.POLYLINE_WIDTH
 import com.example.sensorstreamer.other.TrackingUtility
 import com.example.sensorstreamer.services.PolyLine
-import com.example.sensorstreamer.services.Polylines
 import com.example.sensorstreamer.services.TrackingService
 import com.example.sensorstreamer.ui.viewmodels.MainViewModel
-import com.example.sensorstreamer.ui.viewmodels.StatisticsViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds

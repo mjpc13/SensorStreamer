@@ -19,6 +19,7 @@ class MainRepository @Inject constructor(
 
     fun getTotalDistance() = runDAO.getTotalDistance()
     fun getTotalTimeInMillis() = runDAO.getTotalTimeInMillis()
+    fun getMeanAvgSpeed() = runDAO.getMeanAvgSpeed()
     fun getTotalMeanDistance() = runDAO.getMeanDistance()
     fun getTotalMeanTimeInMillis() = runDAO.getMeanTimeInMillis()
 

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/setupFragment">
+    app:startDestination="@id/runFragment">
 
     <action android:id="@+id/action_global_trackingFragment"
         app:destination="@+id/trackingFragment"
@@ -30,14 +30,6 @@
         android:label="TrackingFragment" >
         <action
             android:id="@+id/action_trackingFragment_to_runFragment"
-            app:destination="@id/runFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/setupFragment"
-        android:name="com.example.sensorstreamer.ui.fragments.SetupFragment"
-        android:label="SetupFragment" >
-        <action
-            android:id="@+id/action_setupFragment_to_runFragment"
             app:destination="@id/runFragment" />
     </fragment>
 </navigation>
