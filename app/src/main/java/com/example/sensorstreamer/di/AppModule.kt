@@ -47,4 +47,5 @@ object AppModule {
     @Provides
     fun provideTopic(sharedPref: SharedPreferences) = sharedPref.getString(KEY_TOPIC, "android/") ?: "android/"
 
+
 }

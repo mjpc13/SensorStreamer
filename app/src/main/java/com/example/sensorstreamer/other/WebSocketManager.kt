@@ -70,7 +70,14 @@ object  WebSocketManager {
      * @return boolean
      */
     fun sendMessage(text: String): Boolean {
-        return if (!isConnect()) false else mWebSocket.send(text)
+        return if (!isConnect()){
+            Log.i(TAG, "Message was not sent")
+            false
+        } else {
+            Log.i(TAG, "Message was sent")
+            mWebSocket.send(text)
+            true
+        }
     }
 
     /**
@@ -88,7 +95,7 @@ object  WebSocketManager {
      */
     fun close() {
         if (isConnect()) {
-            mWebSocket.cancel()
+            //mWebSocket.cancel()
             mWebSocket.close( 1001 , "The client actively closes the connection " )
         }
     }

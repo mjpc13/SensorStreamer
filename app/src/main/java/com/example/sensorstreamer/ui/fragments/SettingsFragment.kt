@@ -2,6 +2,7 @@ package com.example.sensorstreamer.ui.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.sensorstreamer.R
@@ -12,11 +13,13 @@ import com.example.sensorstreamer.other.WebSocketManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_settings.*
+import java.util.*
 import javax.inject.Inject
+import kotlin.concurrent.thread
+import kotlin.concurrent.schedule
 
 @AndroidEntryPoint
 class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
-
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
@@ -36,23 +39,32 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
 
         btnConnect.setOnClickListener {
             val websocket = sharedPreferences.getString(KEY_WEBSOCKET, "ws://0.0.0.0:9090")
-            val topic = sharedPreferences.getString(KEY_TOPIC, "android/")
+            val topic = sharedPreferences.getString(KEY_TOPIC, "android/") ?: "android/"
             WebSocketManager.init(websocket.toString(), this)
-            val success = WebSocketManager.isConnect()
-            if(success){
-                val topicMessage = "{\"op\": \"advertise\", \"topic\": \"${topic.toString()}/gps\", \"sensor_msgs/NavSatFix\"}"
-                if(WebSocketManager.sendMessage(topicMessage)){
-                    Snackbar.make(view, "Connection successful and topic created", Snackbar.LENGTH_LONG).show()
-                } else{
-                    Snackbar.make(view, "Connection failed", Snackbar.LENGTH_LONG).show()
+
+            thread {
+                kotlin.run {
+                    WebSocketManager.connect()
                 }
-            } else{
-                Snackbar.make(view, "Connection failed", Snackbar.LENGTH_LONG).show()
             }
+            /*Timer("SettingUp", false).schedule(100L) {
+                val topicMessage = "{\"op\": \"advertise\", \"topic\": \"${topic.toString()}gps\", \"sensor_msgs/NavSatFix\"}"
+                if(WebSocketManager.sendMessage(topicMessage)){
+                    Snackbar.make(it, "Connection successful and topic created", Snackbar.LENGTH_LONG).show()
+                } else{
+                    Snackbar.make(it, "Connection failed, topic was not created", Snackbar.LENGTH_LONG).show()
+                }
+            }*/
+        }
+
+        btnTmp.setOnClickListener {
+            val topic = sharedPreferences.getString(KEY_TOPIC, "android/") ?: "android/"
+            val topicMessage = "{\"o1p\": \"advertise\", \"topic\": \"${topic.toString()}gps\", \"sensor_msgs/NavSatFix\"}"
+            WebSocketManager.sendMessage(topicMessage)
         }
 
         btnDisconnect.setOnClickListener {
-            val topic = sharedPreferences.getString(KEY_TOPIC, "android/")
+            val topic = sharedPreferences.getString(KEY_TOPIC, "android/") ?: "android/"
 
             val topicMessage = "{\"op\": \"unadvertise\", \"topic\": \"${topic.toString()}/gps\"}"
             WebSocketManager.sendMessage(topicMessage)
@@ -86,19 +98,19 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
     }
 
     override fun onConnectSuccess() {
-        TODO("Not yet implemented")
+        Log.i("SettingsFragment", "OnConnectSuccess")
     }
 
     override fun onConnectFailed() {
-        TODO("Not yet implemented")
+        Log.i("SettingsFragment", "OnConnectFailed")
     }
 
     override fun onClose() {
-        TODO("Not yet implemented")
+        Log.i("SettingsFragment", "OnClose")
     }
 
     override fun onMessage(text: String?) {
-        TODO("Not yet implemented")
+        Log.i("SettingsFragment", "Received Message: $text \n")
     }
 
     override fun onDestroy() {
