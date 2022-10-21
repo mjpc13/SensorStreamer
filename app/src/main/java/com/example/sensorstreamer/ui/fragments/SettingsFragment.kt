@@ -38,8 +38,10 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
         }
 
         btnConnect.setOnClickListener {
-            val websocket = sharedPreferences.getString(KEY_WEBSOCKET, "ws://0.0.0.0:9090")
+            val websocket = sharedPreferences.getString(KEY_WEBSOCKET, "ws://127.0.0.1:9090")
             val topic = sharedPreferences.getString(KEY_TOPIC, "android/") ?: "android/"
+            // I think I need to change the following!
+
             WebSocketManager.init(websocket.toString(), this)
 
             thread {
@@ -47,20 +49,14 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
                     WebSocketManager.connect()
                 }
             }
-            /*Timer("SettingUp", false).schedule(100L) {
-                val topicMessage = "{\"op\": \"advertise\", \"topic\": \"${topic.toString()}gps\", \"sensor_msgs/NavSatFix\"}"
+            Timer("SettingUp", false).schedule(100L) {
+                val topicMessage = "{\"op\": \"advertise\", \"topic\": \"${topic.toString()}gps\", \"type\": \"sensor_msgs/NavSatFix\"}"
                 if(WebSocketManager.sendMessage(topicMessage)){
                     Snackbar.make(it, "Connection successful and topic created", Snackbar.LENGTH_LONG).show()
                 } else{
                     Snackbar.make(it, "Connection failed, topic was not created", Snackbar.LENGTH_LONG).show()
                 }
-            }*/
-        }
-
-        btnTmp.setOnClickListener {
-            val topic = sharedPreferences.getString(KEY_TOPIC, "android/") ?: "android/"
-            val topicMessage = "{\"o1p\": \"advertise\", \"topic\": \"${topic.toString()}gps\", \"sensor_msgs/NavSatFix\"}"
-            WebSocketManager.sendMessage(topicMessage)
+            }
         }
 
         btnDisconnect.setOnClickListener {
@@ -74,7 +70,7 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
     }
 
     private fun loadFieldsFromSharedPref(){
-        val websocket = sharedPreferences.getString(KEY_WEBSOCKET, "ws://0.0.0.0:9090")
+        val websocket = sharedPreferences.getString(KEY_WEBSOCKET, "ws://127.0.0.1:9090")
         val topic = sharedPreferences.getString(KEY_TOPIC, "android/")
 
         etWebSocket.setText(websocket)
@@ -117,4 +113,5 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
         super.onDestroy()
         WebSocketManager.close()
     }
+
 }

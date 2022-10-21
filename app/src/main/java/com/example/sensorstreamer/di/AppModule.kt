@@ -9,6 +9,7 @@ import com.example.sensorstreamer.other.Constants.KEY_TOPIC
 import com.example.sensorstreamer.other.Constants.KEY_WEBSOCKET
 import com.example.sensorstreamer.other.Constants.SHARED_PREFERENCES_NAME
 import com.example.sensorstreamer.other.Constants.STREAMING_DATABASE_NAME
+import com.example.sensorstreamer.other.MessageListener
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +21,7 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 object AppModule {
 
-    @Singleton //Only allows the creation of 1 item. Further requests will pass the same instance!
+    @Singleton
     @Provides
     fun provideStreamingDatabase(
         @ApplicationContext app: Context
@@ -41,11 +42,15 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideWebSocket(sharedPref: SharedPreferences) = sharedPref.getString(KEY_WEBSOCKET, "ws://0.0.0.0:9090") ?: "ws://0.0.0.0:9090"
+    fun provideWebSocket(sharedPref: SharedPreferences) = sharedPref.getString(KEY_WEBSOCKET, "ws://127.0.0.1:9090") ?: "ws://127.0.0.1:9090"
 
     @Singleton
     @Provides
     fun provideTopic(sharedPref: SharedPreferences) = sharedPref.getString(KEY_TOPIC, "android/") ?: "android/"
 
+    /*
+    @Singleton
+    @Provides
+    fun provideMessageListener() = */
 
 }

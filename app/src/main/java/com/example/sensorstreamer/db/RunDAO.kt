@@ -3,6 +3,11 @@ package com.example.sensorstreamer.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+
+/*
+* DAO stands for Data access Object. It is an interface that states all allowed actions
+* that can happened to a DATA TABLE in a database*/
+
 @Dao
 interface RunDAO {
 
