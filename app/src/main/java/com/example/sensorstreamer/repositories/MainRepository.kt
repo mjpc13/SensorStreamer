@@ -25,9 +25,4 @@ class MainRepository @Inject constructor(
     fun getTotalMeanDistance() = runDAO.getMeanDistance()
     fun getTotalMeanTimeInMillis() = runDAO.getMeanTimeInMillis()
 
-    //Insert the MessageListener Interface here??
-    /*fun onConnectSuccess () = msgListener.onConnectSuccess()
-    fun onConnectFailed () = msgListener.onConnectFailed()
-    fun onClose () = msgListener.onClose()
-    fun onMessage (text: String?) = msgListener.onMessage(text)*/
 }
