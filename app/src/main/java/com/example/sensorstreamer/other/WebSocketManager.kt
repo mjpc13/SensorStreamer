@@ -95,7 +95,7 @@ object  WebSocketManager {
      */
     fun close() {
         if (isConnect()) {
-            //mWebSocket.cancel()
+            mWebSocket.cancel()
             mWebSocket.close( 1001 , "The client actively closes the connection " )
         }
     }

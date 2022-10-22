@@ -111,7 +111,7 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
 
     override fun onDestroy() {
         super.onDestroy()
-        WebSocketManager.close()
+        //WebSocketManager.close()
     }
 
 }

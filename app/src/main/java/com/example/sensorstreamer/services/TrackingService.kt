@@ -94,8 +94,8 @@ class TrackingService : LifecycleService() {
         stopSelf()
     }
 
+    //Receive the intent from the fragment
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
         intent?.let {
             when (it.action){
                 ACTION_START_OR_RESUME_SERVICE -> {
