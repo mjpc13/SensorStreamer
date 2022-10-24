@@ -109,9 +109,4 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
         Log.i("SettingsFragment", "Received Message: $text \n")
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        //WebSocketManager.close()
-    }
-
 }

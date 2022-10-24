@@ -26,7 +26,6 @@ import com.example.sensorstreamer.other.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.sensorstreamer.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.sensorstreamer.other.Constants.NOTIFICATION_ID
 import com.example.sensorstreamer.other.Constants.TIMER_UPDATE_INTERVAL
-import com.example.sensorstreamer.other.MessageListener
 import com.example.sensorstreamer.other.TrackingUtility
 import com.example.sensorstreamer.other.WebSocketManager
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -39,6 +38,7 @@ import kotlinx.coroutines.*
 import org.json.JSONObject
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.pow
 
 typealias PolyLine = MutableList<LatLng>
 typealias Polylines = MutableList<PolyLine>
@@ -209,7 +209,7 @@ class TrackingService : LifecycleService() {
                 result?.locations?.let { locations ->
                     for(location in locations){
                         addPathPoint(location)
-                        //NEED TO CALL THE FUNCTION TO PUBLISH MESSAGE TO ROS IN HERE
+
                         val rosMessage = generateROSMessage(location)
                         WebSocketManager.sendMessage(rosMessage)
                         Timber.d("NEW LOCATION: ${location.latitude}, ${location.longitude}")
@@ -272,12 +272,21 @@ class TrackingService : LifecycleService() {
         //TODO: Gather these values from gnssStatus object
         val status = -1
         val service = 1
+        val topic = "android/gps"
+        val frameid = "android_frame"
+        val covariance = when(location!!.hasAccuracy()){
+            true -> location!!.accuracy.pow(2)/2 //compute covariance based on circular accuracy
+            else -> 0
+        }
 
         val gpsMessage = when(location!!.hasAltitude()){
             true -> """
                 {"op": "publish",
-                "topic": "android/gps",
+                "topic": "$topic",
                 "msg": {
+                    "header": {
+                        "frame_id": "$frameid"
+                    },
                     "status": {
                         "status": ${status},
                         "service": $service
@@ -285,14 +294,14 @@ class TrackingService : LifecycleService() {
                     "latitude": ${location.latitude},
                     "longitude": ${location.longitude},
                     "altitude": ${location.altitude},
-                    "position_covariance": [1,0,0,0,1,0,0,0,1],
-                    "position_covariance_type": 0
+                    "position_covariance": [${covariance},0,0,0,${covariance},0,0,0,0],
+                    "position_covariance_type": 1
                     }
                 }
             """.trimIndent()
             else -> """
                 {"op": "publish",
-                "topic": "/android/gps",
+                "topic": "$topic",
                 "msg": {
                     "status": {
                         "status": ${status},
@@ -300,7 +309,7 @@ class TrackingService : LifecycleService() {
                     },
                     "latitude": ${location.latitude},
                     "longitude": ${location.longitude},
-                    "position_covariance": [1,0,0,0,1,0,0,0,1],
+                    "position_covariance": [${covariance},0,0,0,${covariance},0,0,0,0],
                     "position_covariance_type": 0
                     }
                 }

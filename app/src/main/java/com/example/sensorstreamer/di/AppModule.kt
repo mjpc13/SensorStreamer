@@ -9,7 +9,6 @@ import com.example.sensorstreamer.other.Constants.KEY_TOPIC
 import com.example.sensorstreamer.other.Constants.KEY_WEBSOCKET
 import com.example.sensorstreamer.other.Constants.SHARED_PREFERENCES_NAME
 import com.example.sensorstreamer.other.Constants.STREAMING_DATABASE_NAME
-import com.example.sensorstreamer.other.MessageListener
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,9 +47,5 @@ object AppModule {
     @Provides
     fun provideTopic(sharedPref: SharedPreferences) = sharedPref.getString(KEY_TOPIC, "android/") ?: "android/"
 
-    /*
-    @Singleton
-    @Provides
-    fun provideMessageListener() = */
 
 }

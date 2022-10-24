@@ -250,12 +250,6 @@ class TrackingFragment: Fragment(R.layout.fragment_tracking) {
         mapView?.onLowMemory()
     }
 
-    /*The following function might crash the app
-    override fun onDestroy() {
-        super.onDestroy()
-        mapView?.onDestroy()
-    }*/
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView?.onSaveInstanceState(outState)
