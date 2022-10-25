@@ -19,9 +19,7 @@ object Constants {
     const val KEY_WEBSOCKET= "KEY_WEBSOCKET"
     const val KEY_TOPIC= "KEY_TOPIC"
 
-
-
-    const val LOCATION_UPDATE_RATE = 5000L //In milliseconds at the moment
+    const val LOCATION_UPDATE_RATE = 5000L //In milliseconds
     const val FASTEST_LOCATION_INTERVAL = 2000L
 
     const val POLYLINE_COLOR = Color.RED

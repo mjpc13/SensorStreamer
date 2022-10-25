@@ -2,11 +2,13 @@ package com.example.sensorstreamer.repositories
 
 import com.example.sensorstreamer.db.Run
 import com.example.sensorstreamer.db.RunDAO
+import com.example.sensorstreamer.other.MessageListener
 import javax.inject.Inject
 
 // Collects the data from the data sources
 class MainRepository @Inject constructor(
-    val runDAO: RunDAO
+    val runDAO: RunDAO//,
+    //val msgListener: MessageListener
 ) {
 
     suspend fun insertRUN(run: Run)= runDAO.insertRun(run)

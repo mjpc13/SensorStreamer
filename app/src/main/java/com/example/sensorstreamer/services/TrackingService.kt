@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.location.GnssStatus
 import android.location.Location
 import android.os.Build
 import android.os.Looper
@@ -26,6 +27,7 @@ import com.example.sensorstreamer.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.sensorstreamer.other.Constants.NOTIFICATION_ID
 import com.example.sensorstreamer.other.Constants.TIMER_UPDATE_INTERVAL
 import com.example.sensorstreamer.other.TrackingUtility
+import com.example.sensorstreamer.other.WebSocketManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -33,8 +35,10 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import org.json.JSONObject
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.pow
 
 typealias PolyLine = MutableList<LatLng>
 typealias Polylines = MutableList<PolyLine>
@@ -73,6 +77,7 @@ class TrackingService : LifecycleService() {
         curNotificationBuilder = baseNotificationBuilder
         postInitialValues()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
+        GnssStatus.Builder()
 
         isTracking.observe(this, Observer {
             updateLocationTracking(it)
@@ -89,8 +94,8 @@ class TrackingService : LifecycleService() {
         stopSelf()
     }
 
+    //Receive the intent from the fragment
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
         intent?.let {
             when (it.action){
                 ACTION_START_OR_RESUME_SERVICE -> {
@@ -189,6 +194,7 @@ class TrackingService : LifecycleService() {
                     locationCallback,
                     Looper.getMainLooper()
                 )
+                // Add gnssStatus Builder here!
             }
         } else{
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
@@ -203,7 +209,9 @@ class TrackingService : LifecycleService() {
                 result?.locations?.let { locations ->
                     for(location in locations){
                         addPathPoint(location)
-                        //NEED TO CALL THE FUNCTION TO PUBLISH MESSAGE TO ROS IN HERE
+
+                        val rosMessage = generateROSMessage(location)
+                        WebSocketManager.sendMessage(rosMessage)
                         Timber.d("NEW LOCATION: ${location.latitude}, ${location.longitude}")
                     }
                 }
@@ -258,4 +266,58 @@ class TrackingService : LifecycleService() {
             }
         })
     }
+
+    private fun generateROSMessage(location: Location?): String{
+
+        //TODO: Gather these values from gnssStatus object
+        val status = -1
+        val service = 1
+        val topic = "android/gps"
+        val frameid = "android_frame"
+        val covariance = when(location!!.hasAccuracy()){
+            true -> location!!.accuracy.pow(2)/2 //compute covariance based on circular accuracy
+            else -> 0
+        }
+
+        val gpsMessage = when(location!!.hasAltitude()){
+            true -> """
+                {"op": "publish",
+                "topic": "$topic",
+                "msg": {
+                    "header": {
+                        "frame_id": "$frameid"
+                    },
+                    "status": {
+                        "status": ${status},
+                        "service": $service
+                    },
+                    "latitude": ${location.latitude},
+                    "longitude": ${location.longitude},
+                    "altitude": ${location.altitude},
+                    "position_covariance": [${covariance},0,0,0,${covariance},0,0,0,0],
+                    "position_covariance_type": 1
+                    }
+                }
+            """.trimIndent()
+            else -> """
+                {"op": "publish",
+                "topic": "$topic",
+                "msg": {
+                    "status": {
+                        "status": ${status},
+                        "service": $service
+                    },
+                    "latitude": ${location.latitude},
+                    "longitude": ${location.longitude},
+                    "position_covariance": [${covariance},0,0,0,${covariance},0,0,0,0],
+                    "position_covariance_type": 0
+                    }
+                }
+            """.trimIndent()
+        }
+
+        val jsonObject = JSONObject(gpsMessage)
+        return jsonObject.toString()
+    }
+
 }
