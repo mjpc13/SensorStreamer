@@ -14,6 +14,7 @@ object  WebSocketManager {
     private lateinit var messageListener: MessageListener
     private lateinit var mWebSocket: WebSocket
     private var isConnect = false
+    private var toBeClose = false
     private var connectNum = 0
     fun init(url: String, _messageListener: MessageListener) {
         client = OkHttpClient.Builder()
@@ -51,7 +52,7 @@ object  WebSocketManager {
         } else {
             Log.i(
                 TAG,
-                "reconnect over $MAX_NUM,please check url or network"
+                "reconnect over $MAX_NUM, please check url or network"
             )
         }
     }
@@ -94,9 +95,9 @@ object  WebSocketManager {
      * Close connection
      */
     fun close() {
+        Log.i(TAG, "Client requested to close connection")
         if (isConnect()) {
-            mWebSocket.cancel()
-            mWebSocket.close( 1001 , "The client actively closes the connection " )
+            mWebSocket.close( 1001 , "The client actively closes the connection" )
         }
     }
 
