@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.GnssStatus
 import android.location.Location
 import android.os.Build
@@ -21,6 +22,9 @@ import com.example.sensorstreamer.other.Constants.ACTION_PAUSE_SERVICE
 import com.example.sensorstreamer.other.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.sensorstreamer.other.Constants.ACTION_STOP_SERVICE
 import com.example.sensorstreamer.other.Constants.FASTEST_LOCATION_INTERVAL
+import com.example.sensorstreamer.other.Constants.KEY_FRAME_ID
+import com.example.sensorstreamer.other.Constants.KEY_GPS_MESSAGE_RATE
+import com.example.sensorstreamer.other.Constants.KEY_TOPIC
 import com.example.sensorstreamer.other.Constants.LOCATION_UPDATE_RATE
 import com.example.sensorstreamer.other.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.sensorstreamer.other.Constants.NOTIFICATION_CHANNEL_NAME
@@ -57,6 +61,9 @@ class TrackingService : LifecycleService() {
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
     lateinit var curNotificationBuilder: NotificationCompat.Builder
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     companion object {
         //Mutable Live Data allows to observe changes in data
@@ -186,7 +193,7 @@ class TrackingService : LifecycleService() {
 
                 val request = com.google.android.gms.location.LocationRequest().apply {
                     interval = LOCATION_UPDATE_RATE
-                    fastestInterval = FASTEST_LOCATION_INTERVAL
+                    fastestInterval = (1000/sharedPreferences.getFloat(KEY_GPS_MESSAGE_RATE, 0.2F)).toLong()
                     priority = PRIORITY_HIGH_ACCURACY
                 }
                 fusedLocationProviderClient.requestLocationUpdates(
@@ -212,7 +219,7 @@ class TrackingService : LifecycleService() {
 
                         val rosMessage = generateROSMessage(location)
                         WebSocketManager.sendMessage(rosMessage)
-                        Timber.d("NEW LOCATION: ${location.latitude}, ${location.longitude}")
+                        Timber.d("NEW LOCATION: ${location.latitude}, ${location.longitude}, ${location.altitude}")
                     }
                 }
             }
@@ -272,8 +279,8 @@ class TrackingService : LifecycleService() {
         //TODO: Gather these values from gnssStatus object
         val status = -1
         val service = 1
-        val topic = "android/gps"
-        val frameid = "android_frame"
+        val topic =  sharedPreferences.getString(KEY_TOPIC, "android") + "/gps/assisted"
+        val frameid = sharedPreferences.getString(KEY_FRAME_ID, "smartphone_frame")
         val covariance = when(location!!.hasAccuracy()){
             true -> location!!.accuracy.pow(2)/2 //compute covariance based on circular accuracy
             else -> 0
