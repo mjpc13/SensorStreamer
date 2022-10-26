@@ -5,6 +5,8 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.sensorstreamer.db.StreamingDatabase
+import com.example.sensorstreamer.other.Constants.KEY_FRAME_ID
+import com.example.sensorstreamer.other.Constants.KEY_GPS_MESSAGE_RATE
 import com.example.sensorstreamer.other.Constants.KEY_TOPIC
 import com.example.sensorstreamer.other.Constants.KEY_WEBSOCKET
 import com.example.sensorstreamer.other.Constants.SHARED_PREFERENCES_NAME
@@ -45,7 +47,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideTopic(sharedPref: SharedPreferences) = sharedPref.getString(KEY_TOPIC, "android/") ?: "android/"
+    fun provideTopic(sharedPref: SharedPreferences) = sharedPref.getString(KEY_TOPIC, "android") ?: "android"
 
+    @Singleton
+    @Provides
+    fun provideFrameId(sharedPref: SharedPreferences) = sharedPref.getString(KEY_FRAME_ID, "smartphone_base") ?: "smartphone_base"
+
+    @Singleton
+    @Provides
+    fun providePublishRate(sharedPref: SharedPreferences) = sharedPref.getFloat(KEY_GPS_MESSAGE_RATE, 0.2F)
 
 }

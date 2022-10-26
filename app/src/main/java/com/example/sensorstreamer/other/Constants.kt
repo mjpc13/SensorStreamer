@@ -18,9 +18,14 @@ object Constants {
     const val SHARED_PREFERENCES_NAME= "sharedPref"
     const val KEY_WEBSOCKET= "KEY_WEBSOCKET"
     const val KEY_TOPIC= "KEY_TOPIC"
+    const val KEY_FRAME_ID= "KEY_FRAME_ID"
+    const val KEY_GPS_MESSAGE_RATE= "KEY_GPS_MESSAGE_RATE"
 
     const val LOCATION_UPDATE_RATE = 5000L //In milliseconds
     const val FASTEST_LOCATION_INTERVAL = 2000L
+
+    const val MAX_GPS_FREQUENCY = 100L
+    const val MIN_GPS_FREQUENCY = 0.0005F
 
     const val POLYLINE_COLOR = Color.RED
     const val POLYLINE_WIDTH = 8f
