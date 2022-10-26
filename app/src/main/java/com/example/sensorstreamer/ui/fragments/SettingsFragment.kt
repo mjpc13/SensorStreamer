@@ -56,7 +56,7 @@ class SettingsFragment: Fragment(R.layout.fragment_settings), MessageListener{
                     WebSocketManager.connect()
                 }
             }
-            Timer("SettingUp", false).schedule(100L) {
+            Timer("SettingUp", false).schedule(500L) {
                 val topicMessage = "{\"op\": \"advertise\", \"topic\": \"${topic}/gps/assisted\", \"type\": \"sensor_msgs/NavSatFix\"}"
                 if(WebSocketManager.sendMessage(topicMessage)){
                     Snackbar.make(it, "Connection successful and topic created", Snackbar.LENGTH_LONG).show()

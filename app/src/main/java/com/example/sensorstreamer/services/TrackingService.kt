@@ -8,7 +8,6 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.location.GnssStatus
 import android.location.Location
 import android.os.Build
 import android.os.Looper
@@ -21,7 +20,6 @@ import com.example.sensorstreamer.R
 import com.example.sensorstreamer.other.Constants.ACTION_PAUSE_SERVICE
 import com.example.sensorstreamer.other.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.sensorstreamer.other.Constants.ACTION_STOP_SERVICE
-import com.example.sensorstreamer.other.Constants.FASTEST_LOCATION_INTERVAL
 import com.example.sensorstreamer.other.Constants.KEY_FRAME_ID
 import com.example.sensorstreamer.other.Constants.KEY_GPS_MESSAGE_RATE
 import com.example.sensorstreamer.other.Constants.KEY_TOPIC
@@ -84,7 +82,6 @@ class TrackingService : LifecycleService() {
         curNotificationBuilder = baseNotificationBuilder
         postInitialValues()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
-        GnssStatus.Builder()
 
         isTracking.observe(this, Observer {
             updateLocationTracking(it)
@@ -201,7 +198,6 @@ class TrackingService : LifecycleService() {
                     locationCallback,
                     Looper.getMainLooper()
                 )
-                // Add gnssStatus Builder here!
             }
         } else{
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
