@@ -64,14 +64,14 @@ class StatisticsFragment: Fragment(R.layout.fragment_statistics) {
 
         viewModel.meanDistance.observe(viewLifecycleOwner, Observer{
             it?.let{
-                val meanDistance = TrackingUtility.getFormattedStopWatchTime(it.toLong())
-                tvTotalDistance.text = "${meanDistance}km"
+                val meanDistance = it
+                tvTotalDistance.text = "${meanDistance}m"
             }
         })
         viewModel.meanAvgSpeed.observe(viewLifecycleOwner, Observer {
             it?.let{
-                val meanAvgSpeed = TrackingUtility.getFormattedStopWatchTime(it.toLong())
-                tvAverageSpeed.text = "${meanAvgSpeed}km/h"
+                val meanAvgSpeed = it
+                tvAverageSpeed.text = "${meanAvgSpeed}m/s"
             }
         })
         viewModel.runsSortedByDate.observe(viewLifecycleOwner, Observer {
@@ -82,7 +82,7 @@ class StatisticsFragment: Fragment(R.layout.fragment_statistics) {
                     color = ContextCompat.getColor(requireContext(), R.color.colorAccent)
                 }
                 barChart.data = BarData(bardataSet)
-                barChart.marker = CustomMarkerView(it.reversed(), requireContext(), R.layout.marker_view)
+                barChart.marker = CustomMarkerView(it/*.reversed()*/, requireContext(), R.layout.marker_view)
                 barChart.invalidate()
             }
         })
