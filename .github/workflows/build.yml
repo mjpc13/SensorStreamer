@@ -8,11 +8,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      
+      - name: Write API Key to File
+        uses: "DamianReeves/write-file-action@master"
+        with:
+          path: app/src/main/res/values/api_key.xml
+          write-mode: overwrite
+          contents: |
+            <?xml version="1.0" encoding="utf-8"?>
+            <resources>
+              <string name="google_maps_key">${{ secrets.GOOGLE_API_KEY }}</string>
+            </resources>
 
       - name: Set Up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
           
       - name: Run Tests
         run: ./gradlew test
