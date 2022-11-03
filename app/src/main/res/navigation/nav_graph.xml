@@ -10,7 +10,7 @@
 
     <fragment
         android:id="@+id/runFragment"
-        android:name="com.example.sensorstreamer.ui.fragments.RunFragment"
+        android:name="com.mjpc13.sensorstreamer.ui.fragments.RunFragment"
         android:label="RunFragment" >
         <action
             android:id="@+id/action_runFragment_to_trackingFragment"
@@ -18,15 +18,15 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.sensorstreamer.ui.fragments.SettingsFragment"
+        android:name="com.mjpc13.sensorstreamer.ui.fragments.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.example.sensorstreamer.ui.fragments.StatisticsFragment"
+        android:name="com.mjpc13.sensorstreamer.ui.fragments.StatisticsFragment"
         android:label="StatisticsFragment" />
     <fragment
         android:id="@+id/trackingFragment"
-        android:name="com.example.sensorstreamer.ui.fragments.TrackingFragment"
+        android:name="com.mjpc13.sensorstreamer.ui.fragments.TrackingFragment"
         android:label="TrackingFragment" >
         <action
             android:id="@+id/action_trackingFragment_to_runFragment"
