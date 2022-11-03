@@ -22,4 +22,4 @@ To quickly getting started follow the next simple steps:
 ![](images/runs_fragment_tutorial.png)
 ![](images/run_fragment_tutorial.png)
 
-Check the complete [documentation]{https://mjpc13.github.io/SensorStreamer} for more information.
+Check the complete [documentation](https://mjpc13.github.io/SensorStreamer) for more information.
