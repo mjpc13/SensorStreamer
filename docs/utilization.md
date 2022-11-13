@@ -6,7 +6,21 @@ nav_order: 2
 
 # Utilization Guide
 
-In order to use this application to broadcast sensor messages to a running ROS environment it is necesary to initiate a websocket server in ROS. The easiest way to open a websocket in ROS1 is with the [ros bridge package](https://github.com/RobotWebTools/rosbridge_suite). With the application running in your Android device, navigate to the settings page, here you can select the desired configuration to run, a brief explanation of every option available is now provided.
+In order to use this application to broadcast sensor messages to a running ROS environment it is necessary to initiate a websocket server in ROS. The easiest way to open a websocket in ROS1 is with the [ros bridge package](https://github.com/RobotWebTools/rosbridge_suite). The  [ros bridge](https://github.com/RobotWebTools/rosbridge_suite) can be initiated with the following command:
+
+```bash
+roslaunch rosbridge_server rosbridge_websocket.launch
+```
+This will run rosbridge and create a [WebSocket](http://www.html5rocks.com/en/tutorials/websockets/basics/) on port 9090 by default. You can configure the port by setting the ~/port param in ROS. An example launch file that will run rosbridge on port 8080 would look like:
+```xml
+<launch>
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" > 
+     <arg name="port" value="8080"/>
+  </include>
+</launch>
+```
+
+With the application running in your Android device, navigate to the settings page, here you can select the desired configuration to run, a brief explanation of every option available is provided.
 
 ### Settings
 
