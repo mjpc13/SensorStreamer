@@ -274,7 +274,7 @@ class TrackingService : LifecycleService() {
     private fun generateROSMessage(location: Location?): String{
 
         //TODO: Gather these values from gnssStatus object
-        val status = -1
+        val status = 0
         val service = 1
         val topic =  sharedPreferences.getString(KEY_TOPIC, "android") + "/gps/assisted"
         val frameid = sharedPreferences.getString(KEY_FRAME_ID, "smartphone_frame")
